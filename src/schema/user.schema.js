@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -19,6 +20,7 @@ const userSchema = new mongoose.Schema(
             type : String,
             required : [true,'username is required'],
             unique : [true,'username already exists'],
+            minLength : [3, 'Username must be atleast 3 characters'],
             match : [
                 /^[a-zA-Z0-9]+$/,
                 'username must contain only letter and numbers'
@@ -31,9 +33,11 @@ const userSchema = new mongoose.Schema(
     {timestamps : true}
 )
 
-userSchema.pre('save',function saveUser(next){
+userSchema.pre('save',async function(){
+    const SALT = await bcrypt.genSalt(8);
+    this.password = await bcrypt.hash(this.password,SALT);
     this.avatar = `https://robohash.org/${this.username}`;
-    next()
+    //next()
 });
 
 const User = mongoose.model('User',userSchema);
