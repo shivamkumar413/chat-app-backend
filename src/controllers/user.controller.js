@@ -1,7 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 
-import signupService from "../service/signup.service.js";
-import { customErrorResponse, customSuccessResponse,internalServerErrorResponse } from "../utils/commonResponse/responseObject.js";
+import signupService from "../service/user.service.js";
+import 
+    { 
+        customErrorResponse,
+        customSuccessResponse,
+        internalServerErrorResponse,
+    } 
+    from "../utils/commonResponse/responseObject.js";
+    
 export default async function signupController(req,res){
     try {
         const newUser = await signupService(req.body);
