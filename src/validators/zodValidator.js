@@ -23,7 +23,7 @@ export const validate = (schema)=>{
 
             });
             
-            console.log("Explanation : ",explanation);
+            //console.log("Explanation : ",explanation);
             return res.status(StatusCodes.BAD_REQUEST).json(customErrorResponse({
                 message : 'ValidationError' + errorMessage,
                 explanation : explanation
