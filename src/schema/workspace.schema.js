@@ -11,7 +11,7 @@ const workspaceSchema = new mongoose.Schema(
     description: {
       type: String
     },
-    memebers: [
+    members: [
       {
         memberId: {
           type: mongoose.Schema.Types.ObjectId,

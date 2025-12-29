@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "lint:fix": "eslint . --fix ",
-    "start": "npx nodemon src/index.js",
     "format": "prettier --write .",
+    "start": "npm run format && npx nodemon src/index.js",
     "lint": "eslint . "
   },
   "keywords": [],
