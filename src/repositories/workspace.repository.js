@@ -1,9 +1,10 @@
-import crudRepository from './crudRepository.js';
+import { StatusCodes } from 'http-status-codes';
+
+import Channel from '../schema/channel.schema.js';
+import User from '../schema/user.schema.js';
 import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
-import { StatusCodes } from 'http-status-codes';
-import User from '../schema/user.schema.js';
-import Channel from '../schema/channel.schema.js';
+import crudRepository from './crudRepository.js';
 
 const workspaceRepository = {
   ...crudRepository(Workspace),
@@ -53,7 +54,7 @@ const workspaceRepository = {
       });
     }
 
-    const isAlreadyPresentInWorkspace = workspace.memebers.find(
+    const isAlreadyPresentInWorkspace = workspace.members.find(
       (member) => member.memberId === memberId
     );
 
@@ -65,7 +66,7 @@ const workspaceRepository = {
       });
     }
 
-    workspace.memebers.push({
+    workspace.members.push({
       memberId: memberId,
       role: role
     });
