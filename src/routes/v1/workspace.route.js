@@ -1,6 +1,8 @@
 import express from 'express';
 
 import {
+  addChannelToWorkspaceController,
+  addMemberToWorkspaceController,
   createWorkspaceController,
   getAllWorkspaceByUserIdController
 } from '../../controllers/workspace.controller.js';
@@ -18,5 +20,17 @@ router.post(
 );
 
 router.get('/allWorkspace', isAuthenticated, getAllWorkspaceByUserIdController);
+
+router.post(
+  '/addChannel/:workspaceId',
+  isAuthenticated,
+  addChannelToWorkspaceController
+);
+
+router.post(
+  '/addMember/:workspaceId',
+  isAuthenticated,
+  addMemberToWorkspaceController
+);
 
 export default router;

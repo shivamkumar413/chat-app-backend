@@ -36,7 +36,7 @@ const workspaceRepository = {
   },
   addMemberToWorkspace: async function (workspaceId, memberId, role) {
     const workspace = await Workspace.findById(workspaceId).populate('members');
-
+    console.log('Workspace at addtomember : ', workspace);
     if (!workspace) {
       throw new ClientError({
         message: 'workspace not found',
@@ -54,9 +54,12 @@ const workspaceRepository = {
       });
     }
 
-    const isAlreadyPresentInWorkspace = workspace.members.find(
-      (member) => member.memberId === memberId
-    );
+    let isAlreadyPresentInWorkspace = false;
+    workspace.members.forEach((mem) => {
+      if (mem.memberId.toString() === memberId.toString()) {
+        isAlreadyPresentInWorkspace = true;
+      }
+    });
 
     if (isAlreadyPresentInWorkspace) {
       throw new ClientError({
@@ -76,9 +79,11 @@ const workspaceRepository = {
     return workspace;
   },
   addChannelToWorkspace: async function (workspaceId, channelName) {
-    const workspace =
-      await Workspace.findById(workspaceId).populate('channels');
-
+    const workspace = await Workspace.findById(workspaceId).populate({
+      path: 'channels',
+      select: 'name'
+    });
+    console.log('Workspace at repository layer : ', workspace);
     if (!workspace) {
       throw new ClientError({
         message: 'workspace not found',
@@ -103,10 +108,8 @@ const workspaceRepository = {
       name: channelName,
       workspaceId: workspaceId
     });
-
-    workspace.channels.push({
-      channel
-    });
+    console.log('Channel at add channel to ws : ', channel);
+    workspace.channels.push(channel._id);
 
     await workspace.save();
 

@@ -60,12 +60,12 @@ export async function createWorkspaceService({
   } catch (error) {
     console.log('error at create workspace service : ', error);
     if (error.name === 'MongooseError' || error.code === 11000) {
-          throw new ValidationError(
-            {
-              error: ['A Workspace with same name already exists']
-            },
-            'A Workspace with same name already exists'
-          );
+      throw new ValidationError(
+        {
+          error: ['A Workspace with same name already exists']
+        },
+        'A Workspace with same name already exists'
+      );
     }
     throw error;
   }
@@ -76,6 +76,86 @@ export async function getAllWorkspaceByUserIdService(userId) {
     const workspaces =
       await workspaceRepository.getAllWorkspaceByMemberId(userId);
     return workspaces;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addChannelToWorkspaceService(
+  userId,
+  workspaceId,
+  channelName
+) {
+  try {
+    // only admin can create channels --> to check if user is admin of that workspace
+    const workspace = await workspaceRepository.getById(workspaceId);
+    let isAdmin = false;
+    workspace.members.forEach((mem) => {
+      if (
+        mem.memberId.toString() === userId.toString() &&
+        mem.role === 'admin'
+      ) {
+        isAdmin = true;
+        console.log('Already admin');
+      }
+    });
+
+    if (!isAdmin) {
+      throw new ClientError({
+        message: 'Only admin is allowed to create channel in workspace',
+        explanation: 'Invalid user trying to create channel',
+        statusCode: StatusCodes.FORBIDDEN
+      });
+    }
+
+    const ws = await workspaceRepository.addChannelToWorkspace(
+      workspaceId,
+      channelName
+    );
+    await ws.save();
+    return ws;
+  } catch (error) {
+    console.log('Error at add channel to workspace service : ', error);
+    throw error;
+  }
+}
+
+export async function addMemberToWorkspaceService(
+  workspaceId,
+  memberId,
+  role,
+  userId
+) {
+  //only admin can add another member to workspace
+  try {
+    const workspace = await workspaceRepository.getById(workspaceId);
+    let isAdmin = false;
+    workspace.members.forEach((mem) => {
+      if (
+        mem.memberId.toString() === userId.toString() &&
+        mem.role === 'admin'
+      ) {
+        isAdmin = true;
+        console.log('Already admin');
+      }
+    });
+
+    if (!isAdmin) {
+      throw new ClientError({
+        message: 'Only admin is allowed to add member to workspace',
+        explanation: 'Invalid user trying to add member',
+        statusCode: StatusCodes.FORBIDDEN
+      });
+    }
+
+    const ws = await workspaceRepository.addMemberToWorkspace(
+      workspaceId,
+      memberId,
+      role
+    );
+
+    return ws;
   } catch (error) {
     console.log(error);
     throw error;
