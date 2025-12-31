@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import channelRepository from '../repositories/channel.repository.js';
 import workspaceRepository from '../repositories/workspace.repository.js';
+import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
 
@@ -108,6 +109,7 @@ export async function addChannelToWorkspaceService(
 export async function addMemberToWorkspaceService(
     workspaceId,
     memberId,
+    memberEmail,
     role,
     userId
 ) {
@@ -132,10 +134,14 @@ export async function addMemberToWorkspaceService(
                 statusCode: StatusCodes.FORBIDDEN
             });
         }
-
+        // if not memberId
+        let response;
+        if (!memberId) {
+            response = await Workspace.findOne({ email: memberEmail });
+        }
         const ws = await workspaceRepository.addMemberToWorkspace(
             workspaceId,
-            memberId,
+            memberId || response._id,
             role
         );
 
@@ -205,7 +211,7 @@ export async function getWorkspaceService(workspaceId, userId) {
 
         return workspace;
     } catch (error) {
-        console.log(error)
+        console.log(error);
         throw error;
     }
 }
@@ -240,7 +246,7 @@ export async function getWorkspaceByJoincodeService(joinCode, userId) {
     }
 }
 
-export async function updateWorkSpaceController(
+export async function updateWorkSpaceService(
     workspaceId,
     workspaceData,
     userId

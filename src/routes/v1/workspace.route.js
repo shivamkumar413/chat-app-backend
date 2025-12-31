@@ -5,7 +5,10 @@ import {
     addMemberToWorkspaceController,
     createWorkspaceController,
     deleteWorkspaceController,
-    getAllWorkspaceByUserIdController
+    getAllWorkspaceByUserIdController,
+    getWorkspaceByJoinCodeController,
+    getWorkspaceController,
+    updateWorkspaceController
 } from '../../controllers/workspace.controller.js';
 import { isAuthenticated } from '../../middlewares/auth.middleware.js';
 import { workspaceZodSchema } from '../../validators/workspace.zodschema.js';
@@ -22,18 +25,28 @@ router.post(
 
 router.get('/allWorkspace', isAuthenticated, getAllWorkspaceByUserIdController);
 
-router.post(
+router.put(
     '/addChannel/:workspaceId',
     isAuthenticated,
     addChannelToWorkspaceController
 );
 
-router.post(
+router.put(
     '/addMember/:workspaceId',
     isAuthenticated,
     addMemberToWorkspaceController
 );
 
 router.delete('/:workspaceId', isAuthenticated, deleteWorkspaceController);
+
+router.get('/:workspaceId', isAuthenticated, getWorkspaceController);
+
+router.get(
+    '/join/:joinCode',
+    isAuthenticated,
+    getWorkspaceByJoinCodeController
+);
+
+router.put('/"workspaceId', isAuthenticated, updateWorkspaceController);
 
 export default router;
