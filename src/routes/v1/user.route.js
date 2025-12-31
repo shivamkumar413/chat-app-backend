@@ -1,12 +1,12 @@
 import express from 'express';
 
 import {
-  signInController,
-  signupController
+    signInController,
+    signupController
 } from '../../controllers/user.controller.js';
 import {
-  userSignInSchmea,
-  userSignUpSchema
+    userSignInSchmea,
+    userSignUpSchema
 } from '../../validators/user.zodschema.js';
 import { validate } from '../../validators/zodValidator.js';
 

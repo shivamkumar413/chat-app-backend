@@ -14,12 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiRouter);
 
 app.get('/ping', isAuthenticated, (req, res) => {
-  return res.status(StatusCodes.OK).json({
-    message: 'pong'
-  });
+    return res.status(StatusCodes.OK).json({
+        message: 'pong'
+    });
 });
 
 app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
-  connectDB();
+    console.log(`server is running on port ${PORT}`);
+    connectDB();
 });
