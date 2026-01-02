@@ -36,7 +36,7 @@ const workspaceRepository = {
     },
     getWorkspaceByJoinCode: async function (workspaceJoincode) {
         const workspace = await Workspace.findOne({
-            joincode: workspaceJoincode
+            joinCode: workspaceJoincode
         });
         if (!workspace) {
             throw new ClientError({

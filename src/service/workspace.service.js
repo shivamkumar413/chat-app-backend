@@ -165,7 +165,9 @@ export async function deleteWorkspaceService(workspaceId, userId) {
         }
 
         const isAllowed = workspace.members.find(
-            (member) => member.memberId === userId && member.role === 'admin'
+            (member) =>
+                member.memberId.toString() === userId.toString() &&
+                member.role === 'admin'
         );
 
         if (!isAllowed) {
@@ -262,12 +264,13 @@ export async function updateWorkSpaceService(
             });
         }
 
+        console.log(workspace);
         const isAdmin = workspace.members.find(
             (member) =>
-                member.memberId.toString() === userId.toString &&
+                member.memberId.toString() === userId.toString() &&
                 member.role === 'admin'
         );
-
+        console.log(isAdmin);
         if (!isAdmin) {
             throw new ClientError({
                 message: 'Only admin member can update workspace',

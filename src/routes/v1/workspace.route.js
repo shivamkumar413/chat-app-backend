@@ -47,6 +47,6 @@ router.get(
     getWorkspaceByJoinCodeController
 );
 
-router.put('/"workspaceId', isAuthenticated, updateWorkspaceController);
+router.put('/:workspaceId', isAuthenticated, updateWorkspaceController);
 
 export default router;
