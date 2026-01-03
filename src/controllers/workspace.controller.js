@@ -72,7 +72,7 @@ export async function getAllWorkspaceByUserIdController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -98,7 +98,7 @@ export async function addChannelToWorkspaceController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -114,7 +114,7 @@ export async function addMemberToWorkspaceController(req, res) {
         );
         return res
             .status(StatusCodes.OK)
-            .json(customErrorResponse(response, 'Added member successfully'));
+            .json(customSuccessResponse(response, 'Added member successfully'));
     } catch (error) {
         console.log('Error at add member to workspace controller : ', error);
         if (error.statusCode) {
@@ -124,7 +124,7 @@ export async function addMemberToWorkspaceController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -152,7 +152,7 @@ export async function deleteWorkspaceController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -180,7 +180,7 @@ export async function getWorkspaceController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -208,7 +208,7 @@ export async function getWorkspaceByJoinCodeController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }
@@ -237,7 +237,7 @@ export async function updateWorkspaceController(req, res) {
         } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(customErrorResponse(error));
+                .json(internalServerErrorResponse(error));
         }
     }
 }

@@ -1,8 +1,8 @@
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { connectDB } from './config/db.config.js';
 import { PORT } from './config/server.config.js';
+import { connectDB } from './config/db.config.js';
 import { isAuthenticated } from './middlewares/auth.middleware.js';
 import apiRouter from './routes/apiRouter.js';
 

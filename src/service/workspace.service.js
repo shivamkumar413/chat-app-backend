@@ -6,6 +6,8 @@ import workspaceRepository from '../repositories/workspace.repository.js';
 import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
+import { mailQueueProducer } from '../producers/mailQueue.producer.js';
+import { EMAIL_ID } from '../config/server.config.js';
 
 export async function createWorkspaceService({
     userId,
@@ -144,6 +146,14 @@ export async function addMemberToWorkspaceService(
             memberId || response._id,
             role
         );
+
+        mailQueueProducer({
+            from: EMAIL_ID,
+            to: EMAIL_ID,
+            subject: 'You have been added to workspace service',
+            text: `congratulations ! you have been added to ${workspace.name} workspace`
+        });
+        console.log("Before returning ws")
 
         return ws;
     } catch (error) {
