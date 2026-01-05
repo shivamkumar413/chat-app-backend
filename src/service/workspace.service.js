@@ -1,13 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 
+import { EMAIL_ID } from '../config/server.config.js';
+import { mailQueueProducer } from '../producers/mailQueue.producer.js';
 import channelRepository from '../repositories/channel.repository.js';
 import workspaceRepository from '../repositories/workspace.repository.js';
 import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
-import { mailQueueProducer } from '../producers/mailQueue.producer.js';
-import { EMAIL_ID } from '../config/server.config.js';
 
 export async function createWorkspaceService({
     userId,
@@ -153,7 +153,7 @@ export async function addMemberToWorkspaceService(
             subject: 'You have been added to workspace service',
             text: `congratulations ! you have been added to ${workspace.name} workspace`
         });
-        console.log("Before returning ws")
+        console.log('Before returning ws');
 
         return ws;
     } catch (error) {

@@ -1,5 +1,5 @@
-import { mailQueue } from '../queue/mail.queue.js';
 import { emailProcessor } from '../processors/mailQueue.processor.js';
+import { mailQueue } from '../queue/mail.queue.js';
 
 export async function mailQueueProducer(emailData) {
     try {

@@ -1,12 +1,17 @@
+import { createServer } from 'node:http';
+
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { Server } from 'socket.io';
 
-import { PORT } from './config/server.config.js';
 import { connectDB } from './config/db.config.js';
+import { PORT } from './config/server.config.js';
 import { isAuthenticated } from './middlewares/auth.middleware.js';
 import apiRouter from './routes/apiRouter.js';
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +24,9 @@ app.get('/ping', isAuthenticated, (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
+
+
+server.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
     connectDB();
 });
