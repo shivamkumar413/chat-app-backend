@@ -43,13 +43,13 @@ export async function getMessagePaginatedService(
     }
 }
 
-export async function createMessageService(data){
+export async function createMessageService(data) {
     try {
         const response = await messageRepository.create(data);
-        console.log("Response")
-        return response
+        console.log('Response');
+        return response;
     } catch (error) {
-        console.log("Error at create message service : ",error);
+        console.log('Error at create message service : ', error);
         throw error;
     }
 }
