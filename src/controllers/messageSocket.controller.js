@@ -1,13 +1,11 @@
 import { createMessageService } from '../service/message.service.js';
+import { listeningEvent,emittingEvent } from '../utils/commonResponse/socketEventsNames.js';
 
 export async function messageSocketController(io, socket) {
-    socket.on('message', async function createMessage(data, cb) {
-        console.log('Message event triggered : ', data);
+    socket.on(listeningEvent.MESSAGE, async function createMessage(data, cb) {
         const { channelId } = data;
-        console.log(channelId);
         const message = await createMessageService(data);
-        console.log(message);
-        io.to(channelId).emit('message', data.body);
+        io.to(channelId).emit(emittingEvent.MESSAGE, data.body);
         cb({
             success: true,
             message: message
