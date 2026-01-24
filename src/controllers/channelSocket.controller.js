@@ -1,4 +1,4 @@
-import { listeningEvent } from "../utils/commonResponse/socketEventsNames.js";
+import { listeningEvent } from '../utils/commonResponse/socketEventsNames.js';
 
 export async function channelSocketController(io, socket) {
     socket.on(listeningEvent.JOIN_ROOM, async function (data, cb) {
@@ -12,4 +12,3 @@ export async function channelSocketController(io, socket) {
         });
     });
 }
-

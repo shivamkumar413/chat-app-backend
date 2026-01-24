@@ -8,6 +8,7 @@ import {
     getAllWorkspaceByUserIdService,
     getWorkspaceByJoincodeService,
     getWorkspaceService,
+    isUserAdminOfWorkspaceService,
     updateWorkSpaceService
 } from '../service/workspace.service.js';
 import {
@@ -241,3 +242,22 @@ export async function updateWorkspaceController(req, res) {
         }
     }
 }
+
+export async function isUserAdminOfWorkspaceController(){
+    try {
+        const response = await isUserAdminOfWorkspaceService(req.params.workspaceId,req.user)
+
+        return res.status(StatusCodes.OK).json(customSuccessResponse(response,"data fetched successfully"))
+    } catch (error) {
+        console.log("Error at is user admin of workspace controller : ",error);
+        if(error.statusCode){
+            return res
+                .status(error.statusCode)
+                .json(customErrorResponse(error))
+        }else {
+            return res
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                .json(internalServerErrorResponse(error))
+        }
+    }
+} 

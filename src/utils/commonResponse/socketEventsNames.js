@@ -1,8 +1,8 @@
 export const listeningEvent = {
-    JOIN_ROOM : "join-room",
-    MESSAGE : 'message'
-}
+    JOIN_ROOM: 'join-room',
+    MESSAGE: 'message'
+};
 
 export const emittingEvent = {
-    MESSAGE : "message"
-}
+    MESSAGE: 'message'
+};

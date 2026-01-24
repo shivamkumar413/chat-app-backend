@@ -1,5 +1,8 @@
 import { createMessageService } from '../service/message.service.js';
-import { listeningEvent,emittingEvent } from '../utils/commonResponse/socketEventsNames.js';
+import {
+    listeningEvent,
+    emittingEvent
+} from '../utils/commonResponse/socketEventsNames.js';
 
 export async function messageSocketController(io, socket) {
     socket.on(listeningEvent.MESSAGE, async function createMessage(data, cb) {
@@ -11,5 +14,4 @@ export async function messageSocketController(io, socket) {
             message: message
         });
     });
-
 }

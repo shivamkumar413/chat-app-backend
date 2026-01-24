@@ -3,6 +3,8 @@ import { createServer } from 'node:http';
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Server } from 'socket.io';
+import cors from 'cors';
+import { rateLimit } from 'express-rate-limit';
 
 import { connectDB } from './config/db.config.js';
 import { PORT } from './config/server.config.js';
@@ -15,8 +17,18 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    limit: 200,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    ipv6Subnet: 56
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(limiter);
 
 app.use('/api', apiRouter);
 
