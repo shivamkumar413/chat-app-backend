@@ -49,6 +49,4 @@ router.get(
 
 router.put('/:workspaceId', isAuthenticated, updateWorkspaceController);
 
-
-
 export default router;

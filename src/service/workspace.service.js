@@ -295,6 +295,7 @@ export async function updateWorkSpaceService(
             workspaceId,
             workspaceData
         );
+        console.log("updated workspace : ",updatedWorkspace)
         return updatedWorkspace;
     } catch (error) {
         console.log(error);
@@ -302,12 +303,12 @@ export async function updateWorkSpaceService(
     }
 }
 
-export async function isUserAdminOfWorkspaceService(workspaceId,userId){
+export async function isUserAdminOfWorkspaceService(workspaceId, userId) {
     //check if user is admin of workspace
 
-    const workspace = workspaceRepository.getById(workspaceId)
-
-    if(!workspace){
+    const workspace = await workspaceRepository.getById(workspaceId);
+    console.log('ws at is user admin of workspace : ', workspace);
+    if (!workspace) {
         throw new ClientError({
             message: 'workspace not found',
             explanation: 'Invalid data sent from the client',
@@ -315,18 +316,20 @@ export async function isUserAdminOfWorkspaceService(workspaceId,userId){
         });
     }
 
-    const isUserAdminOfWorkspace = workspace.members.find((member)=>{
-        return (member.memberId.toString() === userId.toString() && member.role === 'admin') 
-    })
+    const isUserAdminOfWorkspace = workspace?.members.find((member) => {
+        return (
+            member.memberId.toString() === userId.toString() &&
+            member.role === 'admin'
+        );
+    });
 
-    if(!isUserAdminOfWorkspace){
-        return{
-            isUserAdmin : false
-        }
+    if (!isUserAdminOfWorkspace) {
+        return {
+            isUserAdmin: false
+        };
     }
 
     return {
-        isUserAdmin : true
-    }
-
-}   
+        isUserAdmin: true
+    };
+}

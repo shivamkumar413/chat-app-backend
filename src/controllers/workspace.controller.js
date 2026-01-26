@@ -243,21 +243,26 @@ export async function updateWorkspaceController(req, res) {
     }
 }
 
-export async function isUserAdminOfWorkspaceController(){
+export async function isUserAdminOfWorkspaceController(req, res) {
     try {
-        const response = await isUserAdminOfWorkspaceService(req.params.workspaceId,req.user)
+        const response = await isUserAdminOfWorkspaceService(
+            req.params.workspaceId,
+            req.user
+        );
 
-        return res.status(StatusCodes.OK).json(customSuccessResponse(response,"data fetched successfully"))
+        return res
+            .status(StatusCodes.OK)
+            .json(customSuccessResponse(response, 'data fetched successfully'));
     } catch (error) {
-        console.log("Error at is user admin of workspace controller : ",error);
-        if(error.statusCode){
+        console.log('Error at is user admin of workspace controller : ', error);
+        if (error.statusCode) {
             return res
                 .status(error.statusCode)
-                .json(customErrorResponse(error))
-        }else {
+                .json(customErrorResponse(error));
+        } else {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(internalServerErrorResponse(error))
+                .json(internalServerErrorResponse(error));
         }
     }
-} 
+}

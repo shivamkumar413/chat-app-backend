@@ -16,6 +16,6 @@ const router = express.Router();
 
 router.post('/signup', validate(userSignUpSchema), signupController);
 router.post('/signin', validate(userSignInSchmea), signInController);
-router.get('/:workspaceId',isAuthenticated,isUserAdminOfWorkspaceController)
+router.get('/:workspaceId', isAuthenticated, isUserAdminOfWorkspaceController);
 
 export default router;
