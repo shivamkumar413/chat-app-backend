@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+import { emailToken } from '../utils/commonResponse/authUtils.js';
 
 const userSchema = new mongoose.Schema(
     {
@@ -28,6 +29,16 @@ const userSchema = new mongoose.Schema(
         },
         avatar: {
             type: String
+        },
+        isVerified: {
+            type: Boolean,
+            default: false
+        },
+        emailVerificationToken: {
+            type: String
+        },
+        emailVerificationTokenExpiry: {
+            type: Date
         }
     },
     { timestamps: true }
@@ -37,6 +48,7 @@ userSchema.pre('save', async function () {
     const SALT = await bcrypt.genSalt(8);
     this.password = await bcrypt.hash(this.password, SALT);
     this.avatar = `https://robohash.org/${this.username}`;
+    //Generate email verification token using crypto module or jwt
     //next()
 });
 

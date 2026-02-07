@@ -21,3 +21,11 @@ export const REDIS_HOST = process.env.REDIS_HOST;
 export const REDIS_PORT = process.env.REDIS_PORT;
 
 export const EMAIL_ID = process.env.EMAIL_ID;
+
+export const EMAIL_VERIFICATION_TOKEN_SECRET =
+    process.env.EMAIL_VERIFICATION_TOKEN_SECRET;
+
+export const EMAIL_VERIFICATION_TOKEN_EXPIRY =
+    process.env.EMAIL_VERIFICATION_TOKEN_EXPIRY;
+
+export const BASE_URL = process.env.BASE_URL;

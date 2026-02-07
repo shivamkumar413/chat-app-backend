@@ -1,6 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { signInService, signupService } from '../service/user.service.js';
+import {
+    signInService,
+    signupService,
+    verifyEmailService
+} from '../service/user.service.js';
 import {
     customErrorResponse,
     customSuccessResponse,
@@ -15,6 +19,30 @@ export async function signupController(req, res) {
             .json(customSuccessResponse(newUser, 'user created successfully'));
     } catch (error) {
         console.log('User controller error : ', error);
+        if (error.statusCode) {
+            return res
+                .status(error.statusCode)
+                .json(customErrorResponse(error));
+        }
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(internalServerErrorResponse(error));
+    }
+}
+
+export async function verifyEmailController(req, res) {
+    try {
+        console.log(
+            'Token at email verification controller : ',
+            req.params.token
+        );
+        const response = await verifyEmailService(req.params.token);
+        return res.status(StatusCodes.OK).json({
+            message: 'success',
+            data: response
+        });
+    } catch (error) {
+        console.log('Error while verifying user email : ', error);
         if (error.statusCode) {
             return res
                 .status(error.statusCode)

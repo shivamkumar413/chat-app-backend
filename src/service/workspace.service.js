@@ -8,6 +8,7 @@ import workspaceRepository from '../repositories/workspace.repository.js';
 import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
+import { tryCatch } from 'bullmq';
 
 export async function createWorkspaceService({
     userId,
@@ -200,7 +201,8 @@ export async function deleteWorkspaceService(workspaceId, userId) {
 
 export async function getWorkspaceService(workspaceId, userId) {
     try {
-        const workspace = await workspaceRepository.getById(workspaceId);
+        const workspace =
+            await workspaceRepository.getWorkspaceDetailsById(workspaceId);
         if (!workspace) {
             throw new ClientError({
                 message: 'workspace not found',
@@ -212,7 +214,7 @@ export async function getWorkspaceService(workspaceId, userId) {
         console.log('workspace at get workspace services : ', workspace);
 
         const isMember = workspace.members.find(
-            (member) => member.memberId.toString() === userId.toString()
+            (member) => member.memberId._id.toString() === userId.toString()
         );
 
         if (!isMember) {
@@ -222,6 +224,8 @@ export async function getWorkspaceService(workspaceId, userId) {
                 statusCode: StatusCodes.UNAUTHORIZED
             });
         }
+
+        console.log('Ws details : ', Workspace);
 
         return workspace;
     } catch (error) {
@@ -276,7 +280,7 @@ export async function updateWorkSpaceService(
             });
         }
 
-        console.log(workspace);
+        //console.log(workspace);
         const isAdmin = workspace.members.find(
             (member) =>
                 member.memberId.toString() === userId.toString() &&
@@ -295,7 +299,7 @@ export async function updateWorkSpaceService(
             workspaceId,
             workspaceData
         );
-        console.log("updated workspace : ",updatedWorkspace)
+        //console.log("updated workspace : ",updatedWorkspace)
         return updatedWorkspace;
     } catch (error) {
         console.log(error);
@@ -332,4 +336,42 @@ export async function isUserAdminOfWorkspaceService(workspaceId, userId) {
     return {
         isUserAdmin: true
     };
+}
+
+export async function addMemberToWorkspaceByJoinCodeService({
+    workspaceId,
+    joinCode,
+    memberId
+}) {
+    try {
+        const workspace = await workspaceRepository.getById(workspaceId);
+
+        if (!workspace) {
+            throw new ClientError({
+                message: 'No workspace found',
+                explanation: 'User trying to find invalid workspace',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
+
+        //check if join code is correct
+        if (workspace?.joinCode !== joinCode) {
+            throw new ClientError({
+                message: 'Invalid join code sent by the user',
+                explanation: 'Invalid user trying to join the workspace',
+                statusCode: StatusCodes.UNAUTHORIZED
+            });
+        }
+
+        const ws = await workspaceRepository.addMemberToWorkspace(
+            workspaceId,
+            memberId,
+            'member'
+        );
+
+        return ws;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }

@@ -12,6 +12,7 @@ import { channelSocketController } from './controllers/channelSocket.controller.
 import { messageSocketController } from './controllers/messageSocket.controller.js';
 import { isAuthenticated } from './middlewares/auth.middleware.js';
 import apiRouter from './routes/apiRouter.js';
+import { verifyEmailController } from './controllers/user.controller.js';
 
 const app = express();
 const server = createServer(app);
@@ -27,10 +28,12 @@ const limiter = rateLimit({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
 app.use(cors());
 app.use(limiter);
 
 app.use('/api', apiRouter);
+app.get('/verify-email/:token', verifyEmailController);
 
 app.get('/ping', isAuthenticated, (req, res) => {
     return res.status(StatusCodes.OK).json({
