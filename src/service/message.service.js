@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import channelRepository from '../repositories/channel.repository.js';
 import messageRepository from '../repositories/message.repository.js';
 import ClientError from '../utils/errors/clientErros.js';
+import Message from '../schema/message.schema.js';
 
 export async function getMessagePaginatedService(
     messageParams,
@@ -13,7 +14,7 @@ export async function getMessagePaginatedService(
     try {
         const channelDetails =
             await channelRepository.getChannelWithWorkspaceDetails(
-                messageParams
+                messageParams.channelId
             );
 
         const workspace = channelDetails.workspaceId;
@@ -46,8 +47,12 @@ export async function getMessagePaginatedService(
 export async function createMessageService(data) {
     try {
         const response = await messageRepository.create(data);
+
+        const updatedResponse = await Message.findById(response?._id).populate(
+            'senderId'
+        );
         console.log('Response');
-        return response;
+        return updatedResponse;
     } catch (error) {
         console.log('Error at create message service : ', error);
         throw error;

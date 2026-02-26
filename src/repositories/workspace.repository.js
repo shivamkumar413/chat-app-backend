@@ -10,7 +10,7 @@ const workspaceRepository = {
     ...crudRepository(Workspace),
     getWorkspaceDetailsById: async function (workspaceId) {
         const workspace = await Workspace.findById(workspaceId)
-            .populate('members.memberId')
+            .populate('members.memberId', 'avatar username _id')
             .populate('channels');
         if (!workspace) {
             throw new ClientError({

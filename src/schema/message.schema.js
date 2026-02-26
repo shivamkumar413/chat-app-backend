@@ -12,17 +12,19 @@ const messageSchema = new mongoose.Schema(
         senderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: [true, 'SenderId is required']
         },
         channelId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Channel',
-            required: [true, 'ChannelId is required']
+            ref: 'Channel', 
         },
         workspaceId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Workspace',
-            required: [true, 'WorkspaceId is required']
+            
+        },
+        directconversationId : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Conversation',
         }
     },
     { timestamps: true }
