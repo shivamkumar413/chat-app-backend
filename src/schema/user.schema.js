@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+
 import { emailToken } from '../utils/commonResponse/authUtils.js';
 
 const userSchema = new mongoose.Schema(

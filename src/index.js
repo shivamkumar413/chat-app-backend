@@ -1,18 +1,18 @@
 import { createServer } from 'node:http';
 
+import cors from 'cors';
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
 import { StatusCodes } from 'http-status-codes';
 import { Server } from 'socket.io';
-import cors from 'cors';
-import { rateLimit } from 'express-rate-limit';
 
 import { connectDB } from './config/db.config.js';
 import { PORT } from './config/server.config.js';
 import { channelSocketController } from './controllers/channelSocket.controller.js';
 import { messageSocketController } from './controllers/messageSocket.controller.js';
+import { verifyEmailController } from './controllers/user.controller.js';
 import { isAuthenticated } from './middlewares/auth.middleware.js';
 import apiRouter from './routes/apiRouter.js';
-import { verifyEmailController } from './controllers/user.controller.js';
 
 const app = express();
 const server = createServer(app);

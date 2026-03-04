@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
 import channelRepository from '../repositories/channel.repository.js';
+import messageRepository from '../repositories/message.repository.js';
 import workspaceRepository from '../repositories/workspace.repository.js';
 import ClientError from '../utils/errors/clientErros.js';
-import messageRepository from '../repositories/message.repository.js';
 
 export async function getChannelWithWorkspaceDetailService(channelId, userId) {
     try {

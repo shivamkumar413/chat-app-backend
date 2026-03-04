@@ -2,16 +2,16 @@ import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
-import userRepository from '../repositories/user.repository.js';
-import { createToken, emailToken } from '../utils/commonResponse/authUtils.js';
-import ClientError from '../utils/errors/clientErros.js';
-import ValidationError from '../utils/errors/validationError.js';
-import { mailQueueProducer } from '../producers/mailQueue.producer.js';
 import {
     BASE_URL,
     EMAIL_ID,
     EMAIL_VERIFICATION_TOKEN_SECRET
 } from '../config/server.config.js';
+import { mailQueueProducer } from '../producers/mailQueue.producer.js';
+import userRepository from '../repositories/user.repository.js';
+import { createToken, emailToken } from '../utils/commonResponse/authUtils.js';
+import ClientError from '../utils/errors/clientErros.js';
+import ValidationError from '../utils/errors/validationError.js';
 
 export async function signupService(data) {
     try {

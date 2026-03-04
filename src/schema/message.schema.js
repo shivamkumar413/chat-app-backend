@@ -11,20 +11,19 @@ const messageSchema = new mongoose.Schema(
         },
         senderId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'User'
         },
         channelId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Channel', 
+            ref: 'Channel'
         },
         workspaceId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Workspace',
-            
+            ref: 'Workspace'
         },
-        directconversationId : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'Conversation',
+        directconversationId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Conversation'
         }
     },
     { timestamps: true }

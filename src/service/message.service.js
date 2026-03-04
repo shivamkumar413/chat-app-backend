@@ -2,8 +2,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import channelRepository from '../repositories/channel.repository.js';
 import messageRepository from '../repositories/message.repository.js';
-import ClientError from '../utils/errors/clientErros.js';
+import Conversation from '../schema/directConversation.schema.js';
 import Message from '../schema/message.schema.js';
+import ClientError from '../utils/errors/clientErros.js';
 
 export async function getMessagePaginatedService(
     messageParams,
@@ -51,10 +52,47 @@ export async function createMessageService(data) {
         const updatedResponse = await Message.findById(response?._id).populate(
             'senderId'
         );
-        console.log('Response');
+        //console.log('Response');
         return updatedResponse;
     } catch (error) {
         console.log('Error at create message service : ', error);
+        throw error;
+    }
+}
+
+export async function getDirectMessagePaginatedService(
+    messageParams,
+    page,
+    limit,
+    userId
+) {
+    try {
+        // check if user is part of direct conversation
+        const directConversation = await Conversation.findById(
+            messageParams.directConversationId
+        );
+
+        const isMember = directConversation.members.find(
+            (member) => member.memberId.toString() === userId.toString()
+        );
+
+        if (!isMember) {
+            throw new ClientError({
+                message: 'User is not part of direct conversation',
+                explanation: 'Invalid user trying to get message',
+                statusCode: StatusCodes.UNAUTHORIZED
+            });
+        }
+
+        const messages = await messageRepository.getMessagePaginatedRepository(
+            messageParams,
+            page,
+            limit
+        );
+
+        return messages;
+    } catch (error) {
+        console.log('Error while getting paginated direct message : ', error);
         throw error;
     }
 }

@@ -1,20 +1,20 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const directConversationSchema = new mongoose.Schema(
     {
-        type : 'directmessage',
-        members : [
+        type: 'directmessage',
+        members: [
             {
-                memberId : {
-                    type : mongoose.Schema.Types.ObjectId,
-                    ref : 'User'
+                memberId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
                 }
             }
         ]
     },
-    {timestamps : true}
-)
+    { timestamps: true }
+);
 
-const Conversation = mongoose.model('Conversation',directConversationSchema);
+const Conversation = mongoose.model('Conversation', directConversationSchema);
 
 export default Conversation;

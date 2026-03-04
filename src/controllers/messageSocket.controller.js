@@ -1,7 +1,7 @@
 import { createMessageService } from '../service/message.service.js';
 import {
-    listeningEvent,
-    emittingEvent
+    emittingEvent,
+    listeningEvent
 } from '../utils/commonResponse/socketEventsNames.js';
 
 export async function messageSocketController(io, socket) {

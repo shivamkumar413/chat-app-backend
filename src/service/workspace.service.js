@@ -8,7 +8,6 @@ import workspaceRepository from '../repositories/workspace.repository.js';
 import Workspace from '../schema/workspace.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
-import { tryCatch } from 'bullmq';
 
 export async function createWorkspaceService({
     userId,

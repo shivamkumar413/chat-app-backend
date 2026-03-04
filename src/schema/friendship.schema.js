@@ -1,25 +1,25 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const friendshipSchema = new mongoose.Schema(
     {
-        requester : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'User'
+        requester: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         },
-        recipient : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "User"
+        recipient: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         },
-        status : {
-            type : String,
-            enum : ['pending','accepted','blocked'],
-            default : 'pending',
-            required : true
-        },
+        status: {
+            type: String,
+            enum: ['pending', 'accepted', 'blocked'],
+            default: 'pending',
+            required: true
+        }
     },
-    {timestamps : true}
-)
+    { timestamps: true }
+);
 
-const Friend = mongoose.model('Friend',friendshipSchema);
+const Friend = mongoose.model('Friend', friendshipSchema);
 
 export default Friend;

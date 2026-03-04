@@ -4,13 +4,13 @@ import {
     signInController,
     signupController
 } from '../../controllers/user.controller.js';
+import { isUserAdminOfWorkspaceController } from '../../controllers/workspace.controller.js';
+import { isAuthenticated } from '../../middlewares/auth.middleware.js';
 import {
     userSignInSchmea,
     userSignUpSchema
 } from '../../validators/user.zodschema.js';
 import { validate } from '../../validators/zodValidator.js';
-import { isAuthenticated } from '../../middlewares/auth.middleware.js';
-import { isUserAdminOfWorkspaceController } from '../../controllers/workspace.controller.js';
 
 const router = express.Router();
 
