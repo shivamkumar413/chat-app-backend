@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const directConversationSchema = new mongoose.Schema(
     {
-        type: 'directmessage',
         members: [
             {
                 memberId: {

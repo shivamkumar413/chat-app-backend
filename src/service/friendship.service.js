@@ -18,9 +18,10 @@
 
 import { StatusCodes } from 'http-status-codes';
 
-import friendshipRepository from '../repositories/friendship.repository';
-import userRepository from '../repositories/user.repository';
-import ClientError from '../utils/errors/clientErros';
+import friendshipRepository from '../repositories/friendship.repository.js';
+import userRepository from '../repositories/user.repository.js';
+import ClientError from '../utils/errors/clientErros.js';
+import Friend from '../schema/friendship.schema.js';
 
 export const sendFriendRequestService = async ({
     requesterId,
@@ -42,6 +43,50 @@ export const sendFriendRequestService = async ({
             });
         }
 
+        const checkifAlreadyFriendsorPending = await Friend.find({
+            $or: [
+                {
+                    $and: [
+                        { requester: requesterId },
+                        { recipient: recipientId }
+                    ]
+                },
+                {
+                    $and: [
+                        { requester: recipientId },
+                        { recipient: requesterId }
+                    ]
+                }
+            ]
+        });
+
+        console.log(
+            'check if already friend o0r pending : ',
+            checkifAlreadyFriendsorPending
+        );
+        if (
+            checkifAlreadyFriendsorPending.length > 0 &&
+            checkifAlreadyFriendsorPending[0].status === 'accepted'
+        ) {
+            throw new ClientError({
+                message: 'Already friends',
+                explanation: 'Both user are already friends',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
+
+        if (
+            checkifAlreadyFriendsorPending.length > 0 &&
+            checkifAlreadyFriendsorPending[0].status === 'pending'
+        ) {
+            throw new ClientError({
+                message: 'Already request sent or recieved',
+                explanation:
+                    'Either user has already sent the request or have recieved the request',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
+
         const friendRequest = await friendshipRepository.sendFriendRequest({
             requesterId,
             recipientId
@@ -54,9 +99,50 @@ export const sendFriendRequestService = async ({
     }
 };
 
-export const acceptFriendRequestService = async (friendRequestId) => {
+export const acceptFriendRequestService = async (friendRequestId, userId) => {
     try {
+        // check if user exist
         // check if the friendship document exist
+        // check if user can accept request : means condn : user should be recipient and status should be pending
+
+        const user = await userRepository.getById(userId);
+
+        if (!user) {
+            throw new ClientError({
+                message: 'Invalid user',
+                explanation: 'Please sent valid user id',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
+
+        const friendshipreq =
+            await friendshipRepository.getById(friendRequestId);
+
+        if (!friendshipreq) {
+            throw new ClientError({
+                message: 'Invalid friendship request id sent',
+                explanation: 'Please sent valid friendship request id',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
+
+        if (friendshipreq.recipient.toString() !== userId.toString()) {
+            throw new ClientError({
+                message: 'Invalid user trying to accept the friend request',
+                explanation:
+                    'Only recipient can accept the requester friend request',
+                statusCode: StatusCodes.UNAUTHORIZED
+            });
+        }
+
+        if (friendshipreq.status !== 'pending') {
+            throw new ClientError({
+                message: 'Already accpeted the friend request',
+                explanation:
+                    'recipient trting to accept the already accepted friend request',
+                statusCode: StatusCodes.BAD_REQUEST
+            });
+        }
 
         const friendRequest = await friendshipRepository.acceptFriendReuest({
             friendRequestId
@@ -69,13 +155,29 @@ export const acceptFriendRequestService = async (friendRequestId) => {
     }
 };
 
-export const deleteFriendRequestService = async (friendRequestId) => {
+export const deleteFriendRequestService = async (friendRequestId, userId) => {
     try {
+        // who can decline the friend request
+        // either the user who have sent want to revert back
+        // or the user to whom the request was sent
         const friendshipRequest =
             await friendshipRepository.delete(friendRequestId);
         return friendshipRequest;
     } catch (error) {
         console.log('Error while deleting the friend request : ', error);
+        throw error;
+    }
+};
+
+export const getFriendRequest = async ({ friendRequestId }) => {
+    try {
+        console.log;
+        const friendRequest = await Friend.findById(friendRequestId);
+
+        console.log('get frnd req : ', friendRequest);
+        return friendRequest;
+    } catch (error) {
+        console.log('Error while fetching friend request : ', error);
         throw error;
     }
 };

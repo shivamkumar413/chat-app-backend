@@ -6,13 +6,14 @@ import {
     getallincomingPendingRequestService,
     getallsentPendingRequestService,
     getAllUserFriendsService,
+    getFriendRequest,
     sendFriendRequestService
-} from '../service/friendship.service';
+} from '../service/friendship.service.js';
 import {
     customErrorResponse,
     customSuccessResponse,
     internalServerErrorResponse
-} from '../utils/commonResponse/responseObject';
+} from '../utils/commonResponse/responseObject.js';
 
 export async function sendFriendRequestController(req, res) {
     try {
@@ -45,7 +46,8 @@ export async function sendFriendRequestController(req, res) {
 export async function acceptFriendRequestController(req, res) {
     try {
         const response = await acceptFriendRequestService(
-            req.body.friendRequestId
+            req.body.friendRequestId,
+            req.user
         );
 
         return res
@@ -85,6 +87,33 @@ export async function deleteFriendRequestController(req, res) {
             );
     } catch (error) {
         console.log('Error at delete friend request controller : ', error);
+        if (error.status) {
+            return res
+                .status(error.statusCode)
+                .json(customErrorResponse(error));
+        }
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(internalServerErrorResponse(error));
+    }
+}
+
+export async function getFriendRequestController(req, res) {
+    try {
+        const response = await getFriendRequest({
+            friendRequestId: req.params.friendshipRequestId
+        });
+
+        return res
+            .status(StatusCodes.OK)
+            .json(
+                customSuccessResponse(
+                    response,
+                    'successfully fetched the friendship document'
+                )
+            );
+    } catch (error) {
+        console.log('Error while getting the friend request : ', error);
         if (error.status) {
             return res
                 .status(error.statusCode)

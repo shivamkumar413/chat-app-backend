@@ -2,12 +2,13 @@ import { StatusCodes } from 'http-status-codes';
 
 import Friend from '../schema/friendship.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
-import crudRepository from './crudRepository';
+import crudRepository from './crudRepository.js';
 
 const friendshipRepository = {
     ...crudRepository(Friend),
     sendFriendRequest: async ({ requesterId, recipientId }) => {
         // whenever there is some new friend request , just create new document with both users detail and keep status as pending
+        // can't send request , if both are already friends
         const response = await Friend.create({
             requester: requesterId,
             recipient: recipientId
@@ -30,7 +31,7 @@ const friendshipRepository = {
         }
 
         friendshipRequest.status = 'accepted';
-        await Friend.save();
+        await friendshipRequest.save();
 
         return friendshipRequest;
     },
