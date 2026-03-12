@@ -153,7 +153,7 @@ export async function addMemberToWorkspaceService(
             subject: 'You have been added to workspace service',
             text: `congratulations ! you have been added to ${workspace.name} workspace`
         });
-        console.log('Before returning ws');
+        //console.log('Before returning ws');
 
         return ws;
     } catch (error) {
@@ -210,7 +210,7 @@ export async function getWorkspaceService(workspaceId, userId) {
             });
         }
 
-        console.log('workspace at get workspace services : ', workspace);
+        //console.log('workspace at get workspace services : ', workspace);
 
         const isMember = workspace.members.find(
             (member) => member.memberId._id.toString() === userId.toString()
@@ -224,7 +224,7 @@ export async function getWorkspaceService(workspaceId, userId) {
             });
         }
 
-        console.log('Ws details : ', Workspace);
+        //console.log('Ws details : ', Workspace);
 
         return workspace;
     } catch (error) {
@@ -285,7 +285,7 @@ export async function updateWorkSpaceService(
                 member.memberId.toString() === userId.toString() &&
                 member.role === 'admin'
         );
-        console.log(isAdmin);
+        //console.log(isAdmin);
         if (!isAdmin) {
             throw new ClientError({
                 message: 'Only admin member can update workspace',
@@ -310,7 +310,7 @@ export async function isUserAdminOfWorkspaceService(workspaceId, userId) {
     //check if user is admin of workspace
 
     const workspace = await workspaceRepository.getById(workspaceId);
-    console.log('ws at is user admin of workspace : ', workspace);
+    //console.log('ws at is user admin of workspace : ', workspace);
     if (!workspace) {
         throw new ClientError({
             message: 'workspace not found',

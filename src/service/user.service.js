@@ -12,6 +12,7 @@ import userRepository from '../repositories/user.repository.js';
 import { createToken, emailToken } from '../utils/commonResponse/authUtils.js';
 import ClientError from '../utils/errors/clientErros.js';
 import ValidationError from '../utils/errors/validationError.js';
+import User from '../schema/user.schema.js';
 
 export async function signupService(data) {
     try {
@@ -117,6 +118,20 @@ export async function signInService(data) {
         };
     } catch (error) {
         console.log('Error at signin service : ', error);
+        throw error;
+    }
+}
+
+export async function getUserByUsernameService(username) {
+    try {
+        const response = await User.find({
+            username: username
+        }).select('username avatar');
+
+        console.log('Response at get user by username : ', response);
+        return response;
+    } catch (error) {
+        console.log('Error while finding user by username : ', error);
         throw error;
     }
 }

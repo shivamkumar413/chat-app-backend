@@ -60,10 +60,10 @@ export const sendFriendRequestService = async ({
             ]
         });
 
-        console.log(
-            'check if already friend o0r pending : ',
-            checkifAlreadyFriendsorPending
-        );
+        // console.log(
+        //     'check if already friend o0r pending : ',
+        //     checkifAlreadyFriendsorPending
+        // );
         if (
             checkifAlreadyFriendsorPending.length > 0 &&
             checkifAlreadyFriendsorPending[0].status === 'accepted'

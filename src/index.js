@@ -13,6 +13,8 @@ import { messageSocketController } from './controllers/messageSocket.controller.
 import { verifyEmailController } from './controllers/user.controller.js';
 import { isAuthenticated } from './middlewares/auth.middleware.js';
 import apiRouter from './routes/apiRouter.js';
+import { loginSocketController } from './controllers/loginSocket.controller.js';
+import { friendshipSocketController } from './controllers/friendshipSocket.controller.js';
 
 const app = express();
 const server = createServer(app);
@@ -49,6 +51,8 @@ io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
     channelSocketController(io, socket);
     messageSocketController(io, socket);
+    loginSocketController(io, socket);
+    friendshipSocketController(io,socket);
 });
 
 server.listen(PORT, () => {

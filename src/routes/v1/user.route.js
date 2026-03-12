@@ -1,6 +1,7 @@
 import express from 'express';
 
 import {
+    getUserByUsernameController,
     signInController,
     signupController
 } from '../../controllers/user.controller.js';
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.post('/signup', validate(userSignUpSchema), signupController);
 router.post('/signin', validate(userSignInSchmea), signInController);
+router.get('/username', getUserByUsernameController);
 router.get('/:workspaceId', isAuthenticated, isUserAdminOfWorkspaceController);
 
 export default router;
