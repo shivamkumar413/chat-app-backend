@@ -5,6 +5,7 @@ import {
     getallincomingPendingRequestController,
     getallsentPendingRequestController,
     getAllUserFriendsController,
+    getFriendDetailByfriendshipIdController,
     getFriendRequestController,
     sendFriendRequestController
 } from '../../controllers/friendship.controller.js';
@@ -23,6 +24,7 @@ router.delete(
     isAuthenticated,
     deleteFriendRequestController
 );
+router.get('/:friendshipId/friend-detail',isAuthenticated,getFriendDetailByfriendshipIdController);
 router.get(
     '/friend/:friendshipRequestId',
     isAuthenticated,

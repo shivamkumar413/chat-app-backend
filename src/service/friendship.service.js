@@ -201,6 +201,32 @@ export const getFriendRequest = async ({ friendRequestId }) => {
     }
 };
 
+export const getFriendDetailByfriendshipIdService = async({friendshipId,userId})=>{
+    try {
+        let friendRequest = await Friend.findById(friendshipId);
+        console.log("user id and friend request : ",userId,friendRequest);
+        if(friendRequest.recipient.toString() === userId.toString()){
+            // if user is recipient then send requester details
+            friendRequest = await Friend.findById(friendshipId).populate({
+                path : 'requester',
+                select : 'avatar username'
+            })
+            console.log()
+        }   
+        else if(friendRequest.requester.toString() === userId.toString()){
+            // if user is requester then send recipient details
+            friendRequest = await Friend.findById(friendshipId).populate({
+                path : 'recipient',
+                select : 'avatar username'
+            })
+        }
+
+        return friendRequest;
+    } catch (error) {
+        console.log("Error while getting friend detail by friendshipId : ",error);
+        throw error;
+    }
+}
 // get all pending friend requests of a user
 // get all sent friend requests of a user
 // get all friends of a user

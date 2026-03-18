@@ -6,6 +6,7 @@ import {
     getallincomingPendingRequestService,
     getallsentPendingRequestService,
     getAllUserFriendsService,
+    getFriendDetailByfriendshipIdService,
     getFriendRequest,
     sendFriendRequestService
 } from '../service/friendship.service.js';
@@ -192,6 +193,27 @@ export async function getAllUserFriendsController(req, res) {
             );
     } catch (error) {
         console.log('Error while fetching all friends : ', error);
+        if (error.status) {
+            return res
+                .status(error.statusCode)
+                .json(customErrorResponse(error));
+        }
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(internalServerErrorResponse(error));
+    }
+}
+
+export async function getFriendDetailByfriendshipIdController(req,res){
+    try {
+        const response = await getFriendDetailByfriendshipIdService({
+            friendshipId : req.params.friendshipId,
+            userId : req.user
+        })
+
+        return res.status(StatusCodes.OK).json(customSuccessResponse(response,"successfully fetched the friend data"));
+    } catch (error) {
+        console.log('Error while getting friend detail by friendship id controller : ', error);
         if (error.status) {
             return res
                 .status(error.statusCode)
