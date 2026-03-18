@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 const directConversationSchema = new mongoose.Schema(
     {
+        friendshipId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Friend'
+        },
         members: [
             {
                 memberId: {

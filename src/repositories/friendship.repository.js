@@ -41,6 +41,9 @@ const friendshipRepository = {
                 { requester: { $eq: userId } },
                 { status: { $eq: 'pending' } }
             ]
+        }).populate({
+            path: 'recipient',
+            select: 'avatar username'
         });
 
         return requests;
@@ -51,6 +54,9 @@ const friendshipRepository = {
                 { recipient: { $eq: userId } },
                 { status: { $eq: 'pending' } }
             ]
+        }).populate({
+            path: 'requester',
+            select: 'avatar username'
         });
 
         return requests;
@@ -67,6 +73,9 @@ const friendshipRepository = {
                 },
                 { status: { $eq: 'accepted' } }
             ]
+        }).populate({
+            path: 'requester recipient',
+            select: 'avatar username'
         });
 
         return friends;

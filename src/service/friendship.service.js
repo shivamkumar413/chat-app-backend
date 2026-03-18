@@ -22,6 +22,7 @@ import friendshipRepository from '../repositories/friendship.repository.js';
 import userRepository from '../repositories/user.repository.js';
 import ClientError from '../utils/errors/clientErros.js';
 import Friend from '../schema/friendship.schema.js';
+import Conversation from '../schema/directConversation.schema.js';
 
 export const sendFriendRequestService = async ({
     requesterId,
@@ -106,7 +107,7 @@ export const acceptFriendRequestService = async (friendRequestId, userId) => {
         // check if user can accept request : means condn : user should be recipient and status should be pending
 
         const user = await userRepository.getById(userId);
-
+        console.log('friendreqid at accept frnd request : ', friendRequestId);
         if (!user) {
             throw new ClientError({
                 message: 'Invalid user',
@@ -148,6 +149,8 @@ export const acceptFriendRequestService = async (friendRequestId, userId) => {
             friendRequestId
         });
 
+        // afer friend request is accepted , add both members to direct conversation
+
         return friendRequest;
     } catch (error) {
         console.log('Error while accepting friend request : ', error);
@@ -160,6 +163,22 @@ export const deleteFriendRequestService = async (friendRequestId, userId) => {
         // who can decline the friend request
         // either the user who have sent want to revert back
         // or the user to whom the request was sent
+        console.log(userId);
+        const isUserRequesterOrRecipient = await Friend.find({
+            $or: [{ requester: userId }, { recipient: userId }]
+        });
+
+        console.log(isUserRequesterOrRecipient);
+
+        if (isUserRequesterOrRecipient.length == 0) {
+            throw new ClientError({
+                message: 'Invalid user trying to delete friend request',
+                explanation:
+                    'Either requester or recipient can delete friend request',
+                statusCode: StatusCodes.FORBIDDEN
+            });
+        }
+
         const friendshipRequest =
             await friendshipRepository.delete(friendRequestId);
         return friendshipRequest;
@@ -171,7 +190,7 @@ export const deleteFriendRequestService = async (friendRequestId, userId) => {
 
 export const getFriendRequest = async ({ friendRequestId }) => {
     try {
-        console.log;
+        //console.log;
         const friendRequest = await Friend.findById(friendRequestId);
 
         console.log('get frnd req : ', friendRequest);
@@ -189,6 +208,7 @@ export const getFriendRequest = async ({ friendRequestId }) => {
 export const getallsentPendingRequestService = async (userId) => {
     // condition : requester and pending
     // check if user exists
+
     try {
         const user = await userRepository.getById(userId);
         if (!user) {

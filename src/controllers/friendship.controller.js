@@ -46,7 +46,7 @@ export async function sendFriendRequestController(req, res) {
 export async function acceptFriendRequestController(req, res) {
     try {
         const response = await acceptFriendRequestService(
-            req.body.friendRequestId,
+            req.params.friendRequestId,
             req.user
         );
 
@@ -74,7 +74,8 @@ export async function acceptFriendRequestController(req, res) {
 export async function deleteFriendRequestController(req, res) {
     try {
         const response = await deleteFriendRequestService(
-            req.body.friendRequestId
+            req.params.friendRequestId,
+            req.user
         );
 
         return res

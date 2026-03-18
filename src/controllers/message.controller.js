@@ -40,7 +40,7 @@ export async function getDirectMessagePaginatedController(req, res) {
     try {
         const response = await getDirectMessagePaginatedService(
             {
-                directconversationId: req.params.conversationId
+                friendshipId: req.params.friendshipId
             },
             req.query.page || 1,
             req.query.limit || 20,

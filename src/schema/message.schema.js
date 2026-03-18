@@ -21,9 +21,9 @@ const messageSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Workspace'
         },
-        directconversationId: {
+        friendshipId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Conversation'
+            ref: 'Friend'
         }
     },
     { timestamps: true }

@@ -13,8 +13,16 @@ import { isAuthenticated } from '../../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.post('/send', isAuthenticated, sendFriendRequestController);
-router.patch('/accept', isAuthenticated, acceptFriendRequestController);
-router.delete('/decline', isAuthenticated, deleteFriendRequestController);
+router.patch(
+    '/accept/:friendRequestId',
+    isAuthenticated,
+    acceptFriendRequestController
+);
+router.delete(
+    '/decline/:friendRequestId',
+    isAuthenticated,
+    deleteFriendRequestController
+);
 router.get(
     '/friend/:friendshipRequestId',
     isAuthenticated,

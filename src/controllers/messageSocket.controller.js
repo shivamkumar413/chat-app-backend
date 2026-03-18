@@ -14,4 +14,14 @@ export async function messageSocketController(io, socket) {
             message: message
         });
     });
+
+    socket.on(listeningEvent.DIRECT_MESSAGE, async function (data, cb) {
+        const { friendshipId } = data;
+        const message = await createMessageService(data);
+        io.to(friendshipId).emit(emittingEvent.DIRECT_MESSAGE, message);
+        cb?.({
+            success: true,
+            message: message
+        });
+    });
 }

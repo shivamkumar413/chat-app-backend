@@ -5,6 +5,7 @@ import messageRepository from '../repositories/message.repository.js';
 import Conversation from '../schema/directConversation.schema.js';
 import Message from '../schema/message.schema.js';
 import ClientError from '../utils/errors/clientErros.js';
+import friendshipRepository from '../repositories/friendship.repository.js';
 
 export async function getMessagePaginatedService(
     messageParams,
@@ -67,21 +68,20 @@ export async function getDirectMessagePaginatedService(
     userId
 ) {
     try {
-        // check if user is part of direct conversation
-        const directConversation = await Conversation.findById(
-            messageParams.directConversationId
+        // check if user is friends
+        const friend = await friendshipRepository.findById(
+            messageParams.friendshipId
         );
 
-        const isMember = directConversation.members.find(
-            (member) => member.memberId.toString() === userId.toString()
-        );
+        if (!friend) {
+        }
 
-        if (!isMember) {
-            throw new ClientError({
-                message: 'User is not part of direct conversation',
-                explanation: 'Invalid user trying to get message',
-                statusCode: StatusCodes.UNAUTHORIZED
-            });
+        // check if either user is requester or recipient
+
+        if (
+            friend.requester.toString() !== userId &&
+            friend.recipient.toString() !== userId
+        ) {
         }
 
         const messages = await messageRepository.getMessagePaginatedRepository(

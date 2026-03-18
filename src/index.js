@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
     channelSocketController(io, socket);
     messageSocketController(io, socket);
     loginSocketController(io, socket);
-    friendshipSocketController(io,socket);
+    friendshipSocketController(io, socket);
 });
 
 server.listen(PORT, () => {
