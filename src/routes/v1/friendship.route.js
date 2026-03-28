@@ -24,7 +24,11 @@ router.delete(
     isAuthenticated,
     deleteFriendRequestController
 );
-router.get('/:friendshipId/friend-detail',isAuthenticated,getFriendDetailByfriendshipIdController);
+router.get(
+    '/:friendshipId/friend-detail',
+    isAuthenticated,
+    getFriendDetailByfriendshipIdController
+);
 router.get(
     '/friend/:friendshipRequestId',
     isAuthenticated,

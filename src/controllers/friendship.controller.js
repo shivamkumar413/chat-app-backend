@@ -204,16 +204,26 @@ export async function getAllUserFriendsController(req, res) {
     }
 }
 
-export async function getFriendDetailByfriendshipIdController(req,res){
+export async function getFriendDetailByfriendshipIdController(req, res) {
     try {
         const response = await getFriendDetailByfriendshipIdService({
-            friendshipId : req.params.friendshipId,
-            userId : req.user
-        })
+            friendshipId: req.params.friendshipId,
+            userId: req.user
+        });
 
-        return res.status(StatusCodes.OK).json(customSuccessResponse(response,"successfully fetched the friend data"));
+        return res
+            .status(StatusCodes.OK)
+            .json(
+                customSuccessResponse(
+                    response,
+                    'successfully fetched the friend data'
+                )
+            );
     } catch (error) {
-        console.log('Error while getting friend detail by friendship id controller : ', error);
+        console.log(
+            'Error while getting friend detail by friendship id controller : ',
+            error
+        );
         if (error.status) {
             return res
                 .status(error.statusCode)

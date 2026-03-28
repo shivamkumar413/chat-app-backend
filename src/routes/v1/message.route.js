@@ -1,6 +1,7 @@
 import express from 'express';
 
 import {
+    deleteMesssageByIdController,
     getDirectMessagePaginatedController,
     getMessagePaginatedController
 } from '../../controllers/message.controller.js';
@@ -14,4 +15,5 @@ router.get(
     isAuthenticated,
     getDirectMessagePaginatedController
 );
+router.delete('/:messageId', isAuthenticated, deleteMesssageByIdController);
 export default router;

@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import {
+    deleteMesssageByIdService,
     getDirectMessagePaginatedService,
     getMessagePaginatedService
 } from '../service/message.service.js';
@@ -47,7 +48,7 @@ export async function getDirectMessagePaginatedController(req, res) {
             req.user
         );
 
-        return response
+        return res
             .status(StatusCodes.OK)
             .json(
                 customSuccessResponse(
@@ -60,6 +61,32 @@ export async function getDirectMessagePaginatedController(req, res) {
             'Error at get paginated direct message controller : ',
             error
         );
+        if (error.statusCode) {
+            return res.json(error.statusCode).json(customErrorResponse(error));
+        }
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(internalServerErrorResponse(error));
+    }
+}
+
+export async function deleteMesssageByIdController(req, res) {
+    try {
+        const response = await deleteMesssageByIdService({
+            messageId: req.params.messageId,
+            userId: req.user
+        });
+
+        return res
+            .status(StatusCodes.OK)
+            .json(
+                customSuccessResponse(
+                    response,
+                    'Successfully deleted the message'
+                )
+            );
+    } catch (error) {
+        console.log('Error at delete message controller : ', error);
         if (error.statusCode) {
             return res.json(error.statusCode).json(customErrorResponse(error));
         }

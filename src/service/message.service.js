@@ -69,7 +69,7 @@ export async function getDirectMessagePaginatedService(
 ) {
     try {
         // check if user is friends
-        const friend = await friendshipRepository.findById(
+        const friend = await friendshipRepository.getById(
             messageParams.friendshipId
         );
 
@@ -93,6 +93,28 @@ export async function getDirectMessagePaginatedService(
         return messages;
     } catch (error) {
         console.log('Error while getting paginated direct message : ', error);
+        throw error;
+    }
+}
+
+export async function deleteMesssageByIdService({ messageId, userId }) {
+    try {
+        console.log(messageId);
+        const message = await messageRepository.getById(messageId);
+        console.log('checkpoint ');
+        console.log(message, userId);
+        if (message.senderId.toString() !== userId.toString()) {
+            throw new ClientError({
+                message: 'Invalid user trying to delete the message',
+                explanation: 'Only sender can delete the message',
+                statusCode: StatusCodes.UNAUTHORIZED
+            });
+        }
+        const response = await messageRepository.delete(messageId);
+        console.log('successfully deleted message : ', response);
+        return response;
+    } catch (error) {
+        console.log('Error while deleting the message : ', error);
         throw error;
     }
 }
