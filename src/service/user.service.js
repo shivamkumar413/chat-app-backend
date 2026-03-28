@@ -18,17 +18,17 @@ export async function signupService(data) {
     try {
         const response = await userRepository.create(data);
 
-        console.log('email at pre save hook : ', response.email);
-        const emailTokenCode = emailToken({ email: response.email });
-        response.emailVerificationToken = emailTokenCode;
-        response.emailVerificationTokenExpiry = Date.now() + 360000;
-        await response.save();
-        mailQueueProducer({
-            from: EMAIL_ID,
-            to: response.email,
-            subject: 'Click on the link below to verify your email',
-            text: `${BASE_URL}/verify-email/${response.emailVerificationToken}`
-        });
+        // console.log('email at pre save hook : ', response.email);
+        // const emailTokenCode = emailToken({ email: response.email });
+        // response.emailVerificationToken = emailTokenCode;
+        // response.emailVerificationTokenExpiry = Date.now() + 360000;
+        // await response.save();
+        // mailQueueProducer({
+        //     from: EMAIL_ID,
+        //     to: response.email,
+        //     subject: 'Click on the link below to verify your email',
+        //     text: `${BASE_URL}/verify-email/${response.emailVerificationToken}`
+        // });
 
         return response;
     } catch (error) {

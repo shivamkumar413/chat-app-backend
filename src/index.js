@@ -40,9 +40,9 @@ app.use(cors());
 // app.use(limiter);
 
 app.use('/api', apiRouter);
-app.get('/verify-email/:token', verifyEmailController);
+//app.get('/verify-email/:token', verifyEmailController);
 
-app.get('/ping', isAuthenticated, (req, res) => {
+app.get('/ping', (req, res) => {
     return res.status(StatusCodes.OK).json({
         message: 'pong'
     });
