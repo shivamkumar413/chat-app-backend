@@ -16,6 +16,7 @@ import apiRouter from './routes/apiRouter.js';
 import { loginSocketController } from './controllers/loginSocket.controller.js';
 import { friendshipSocketController } from './controllers/friendshipSocket.controller.js';
 import { directMessageSocketController } from './controllers/directMessageSocket.controller.js';
+import { videocallSocketController } from './controllers/videoCallSocket.controller.js';
 
 const app = express();
 const server = createServer(app);
@@ -55,6 +56,7 @@ io.on('connection', (socket) => {
     loginSocketController(io, socket);
     friendshipSocketController(io, socket);
     directMessageSocketController(io, socket);
+    videocallSocketController(io, socket);
 });
 
 server.listen(PORT, () => {
